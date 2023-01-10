@@ -1,0 +1,42 @@
+{
+  "name": "rendre",
+  "version": "0.0.0",
+  "description": "",
+  "author": "haihaixhj",
+  "license": "MIT",
+  "keywords": [
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "build": "tsup",
+    "prepublishOnly": "pnpm run lint:fix && pnpm run build",
+    "release": "bumpp && npm publish"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.33.1",
+    "bumpp": "^8.2.1",
+    "eslint": "^8.29.0",
+    "tsup": "^6.5.0",
+    "tsx": "^3.12.1",
+    "typescript": "^4.9.3"
+  }
+}
