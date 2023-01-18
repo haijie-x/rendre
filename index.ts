@@ -9,16 +9,23 @@ const tryCatchWrap = async (cb: () => void) => {
 };
 (async () => {
   tryCatchWrap(() =>
-    execa("vite", ["build"], {
+    execa("vite", ["build", "vite.config.client.ts"], {
       cwd: __dirname,
     })
   );
-  console.log("success: 打包产物完成!");
+  console.log("success: client打包完成!");
 
   tryCatchWrap(() =>
-    execa("tsx", ["watch", "./src/server/index.ts"], {
+    execa("vite", ["build", "vite.config.server.ts"], {
       cwd: __dirname,
     })
   );
-  console.log("success: 运行入口文件!");
+  console.log("success: server打包完成!");
+
+  // tryCatchWrap(() =>
+  //   execa("tsx", ["watch", "./src/server/index.ts"], {
+  //     cwd: __dirname,
+  //   })
+  // );
+  // console.log("success: 运行入口文件!");
 })();

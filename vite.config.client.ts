@@ -11,10 +11,10 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: "./src/client",
+      entry: "./src/client/index.tsx",
       name: "client",
       fileName: "index",
     },
-    outDir: "./src/client/dist",
+    outDir: "dist/client",
   },
 });
