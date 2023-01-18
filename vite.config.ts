@@ -6,6 +6,9 @@ import { resolve } from "path";
 export default defineConfig({
   plugins: [react()],
   mode: "production",
+  define: {
+    "process.env.NODE_ENV": "'production'",
+  },
   build: {
     lib: {
       entry: "./src/client",
