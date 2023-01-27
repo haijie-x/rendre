@@ -1,21 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
+import { resolve } from "node:path";
+import rimraf from "rimraf";
+
+rimraf.sync(resolve(__dirname, "./dist"));
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  mode: "development",
+  mode: "production",
   define: {
-    "process.env.NODE_ENV": "'development'",
+    "process.env.NODE_ENV": "'production'",
   },
   build: {
     lib: {
-      entry: "./src/server/index.ts",
-      name: "server",
-      fileName: "index",
+      entry: ["./src/entry-client.tsx", "./src/entry-server.tsx"],
     },
-    outDir: "dist/server",
+    outDir: "dist",
     rollupOptions: {
       output: [
         {
@@ -23,7 +24,7 @@ export default defineConfig({
           exports: "named",
           sourcemap: true,
           // preserveModules: false,
-          entryFileNames: "index.js",
+          entryFileNames: "[name].js",
           chunkFileNames: "[name].js",
         },
       ],

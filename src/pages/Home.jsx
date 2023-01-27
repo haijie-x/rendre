@@ -1,8 +1,6 @@
 import React from "react";
 
-interface IProps {}
-
-const Home: React.FC<IProps> = (props) => {
+const Home = (props) => {
   return (
     <>
       <h2>Home</h2>

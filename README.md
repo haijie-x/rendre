@@ -1,1 +1,1 @@
-An SSR framework based on React
+SSR practice based on React + Vite

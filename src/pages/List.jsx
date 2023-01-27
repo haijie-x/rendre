@@ -1,8 +1,6 @@
 import React from "react";
 
-interface IProps {}
-
-const List: React.FC<IProps> = (props) => {
+const List = (props) => {
   return (
     <>
       <h2>List</h2>
