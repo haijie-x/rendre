@@ -23,14 +23,10 @@
     "types": [
       "vite/client"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
+    "baseUrl": "."
   },
   "include": [
-    "src"
+    "packages/rendre",
+    "example",
   ]
 }

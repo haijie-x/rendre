@@ -1,5 +1,5 @@
 {
-  "name": "rendre",
+  "name": "root",
   "version": "0.0.0",
   "description": "",
   "author": "haihaixhj",
@@ -22,8 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "pnpm run build && tsx watch ./src/index.ts",
-    "build": "vite build"
+    "start": "pnpm -C example start"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",

@@ -14,7 +14,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: ["./src/entry-client.tsx", "./src/entry-server.tsx"],
+      entry: ["./entry-client.tsx", "./entry-server.tsx"],
     },
     outDir: "dist",
     rollupOptions: {
