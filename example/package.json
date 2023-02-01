@@ -12,6 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "rendre": "workspace:^1.0.0"
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "babel-loader": "^9.1.2",
+    "rendre": "workspace:^1.0.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.3",
+    "webpack": ">=5"
   }
 }

@@ -39,4 +39,4 @@ const toAbsolute = (relativePath: string) =>
 const rendre = new Rendre({
   entryDir: toAbsolute(""),
 });
-rendre.run();
+// rendre.run();
