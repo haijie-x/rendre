@@ -1,4 +1,4 @@
-import { renderToString } from "react-dom/server";
+import { renderToNodeStream } from "react-dom/server";
 import Koa from "koa";
 import Compiler from "./Compiler";
 import Loader from "./Loader";
@@ -62,8 +62,8 @@ class Rendre extends Koa {
         ctx.set("Transfer-Encoding", "chunked");
         ctx.res.removeHeader("Content-Length");
         ctx.type = "html";
-        const html = renderToString(React.createElement(ctx.view));
-        ctx.body = createReadStream(html);
+        const html = renderToNodeStream(React.createElement(ctx.view));
+        ctx.body = html;
         // ctx.body = html;
       } else {
         ctx.body = "Not Found 404 ...";
