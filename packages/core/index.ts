@@ -1,7 +1,9 @@
+import { renderToString } from "react-dom/server";
 import Koa from "koa";
-import KoaStatic from "koa-static";
 import Compiler from "./Compiler";
 import Loader from "./Loader";
+import createReadStream from "./utils/createReadStream";
+import React from "react";
 
 type Options = {
   entryDirname: string;
@@ -10,54 +12,68 @@ type Options = {
 
 class Rendre extends Koa {
   private defaultConfig = {};
-  private compileConfig: any;
 
-  private config: any;
+  private config: {
+    compileConfig?: any;
+  } = {};
+
   private Compiler: any;
   private Loader: any;
 
   constructor(options: Options) {
     super();
-    const config = (this.config = Object.assign(
-      {},
-      this.defaultConfig,
-      options
-    ));
-    this.compileConfig = {
-      entryDirname: config.entryDirname,
-    };
+    this.config.compileConfig = Object.assign({}, this.defaultConfig, options);
 
     this.Compiler = new Compiler(this);
 
     this.Loader = new Loader(this);
 
-    // this.use(KoaStatic(entryDir + "/dist"));
-    // this.use((ctx) => {
-    //   console.log(ctx.url);
-    //   ctx.body = "Hello,Rendre";
-    // const url = req.originalUrl;
-    // // @ts-ignore
-    // const render = (await import("./dist/entry-server.js")).render;
-    // const ctx = await fakeContext();
-    // const appHtml = render(url, ctx);
-    // res
-    //   .status(200)
-    //   .set({ "Content-Type": "text/html" })
-    //   .end(getTemplateHtml(appHtml, ctx));
-    // });
+    this.applyMiddleware();
   }
   async launch() {
     await this.compile();
-    this.Loader.loadModule("home");
     this.startServer();
   }
 
   startServer() {
     this.listen(3333, "", () => {
-      console.log(`Listening at port 3333...`);
+      console.log(`✅💫 [Rendre] listening at port 3333 `);
     });
   }
+  loadMiddleware() {
+    this.use(async (ctx, next) => {
+      const url = ctx.url;
+      const viewName = url.replace(/^\/(.+)/, (_, s1) => s1);
 
+      const view = await this.Loader.loadModule(
+        viewName,
+        ".rendre/server/*.js"
+      );
+      if (view) {
+        ctx.view = view?.default ? view.default : view;
+      }
+      next();
+    });
+  }
+  renderMiddleware() {
+    this.use(async (ctx, next) => {
+      const { view } = ctx;
+      if (view) {
+        ctx.set("Transfer-Encoding", "chunked");
+        ctx.res.removeHeader("Content-Length");
+        ctx.type = "html";
+        const html = renderToString(React.createElement(ctx.view));
+        ctx.body = createReadStream(html);
+        // ctx.body = html;
+      } else {
+        ctx.body = "Not Found 404 ...";
+      }
+    });
+  }
+  applyMiddleware() {
+    this.loadMiddleware();
+    this.renderMiddleware();
+  }
   async compile() {
     await this.Compiler.compile();
   }

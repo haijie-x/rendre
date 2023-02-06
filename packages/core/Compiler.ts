@@ -7,18 +7,25 @@ class Compiler {
     module: {
       rules: this.getWebpackLoaderConf(),
     },
+    externals: {
+      react: "react",
+    },
   };
   private compileConfig: any;
+  private app: any;
 
-  constructor(rendreVo: any) {
+  constructor(app: any) {
+    this.app = app;
+    const { entryDirname, buildDirname } = app.config.compileConfig;
+
     this.compileConfig = Object.assign({}, this.defaultConfig, {
       entry: {
-        home: rendreVo.compileConfig.entryDirname + "/pages/Home.jsx",
-        List: rendreVo.compileConfig.entryDirname + "/pages/List.jsx",
+        home: entryDirname + "/pages/Home.jsx",
+        List: entryDirname + "/pages/List.jsx",
       },
       output: {
-        path: rendreVo.compileConfig.entryDirname + "/bundle",
-        filename: "[name].bundle.js",
+        path: buildDirname + "/server",
+        filename: "[name].js",
         libraryTarget: "commonjs2",
       },
     });

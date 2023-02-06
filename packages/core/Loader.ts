@@ -1,25 +1,32 @@
 import LRU from "lru-cache";
+import { renderToString } from "react-dom/server";
+import React from "react";
+import glob from "fast-glob";
+import path from "node:path";
 class Loader {
   cache: any;
-  rendreVo: any;
-  constructor(instance: any) {
-    this.cache = new LRU({
-      max: 1000 * 60,
-      maxSize: 2,
-    });
-    this.rendreVo = instance;
+  app: any;
+  constructor(app: any) {
+    // this.cache = new LRU({
+    //   max: 1000 * 60,
+    //   maxSize: 2,
+    // });
+    this.app = app;
   }
-  async loadModule(moduleName: string) {
-    const modulePath =
-      `${this.rendreVo.config.buildDirname}/${moduleName}.bundle.js`
-        .replace(/^(\C:|\D:)/, "")
-        .replace(/\\/g, "/");
+  async loadModule(name: string, target: string) {
+    const modules = glob.sync(target, {
+      absolute: true,
+    });
 
-    const moduleContent = await import(
-      "/Project/front/rendre/example/bundle/home.bundle.js"
-    );
     // this.cache.set(moduleName, module);
-    console.log(moduleContent);
+    for (let module of modules) {
+      const nameOfModulePath = path.parse(module).name;
+      if (name === nameOfModulePath) {
+        const content = await import(`file://${module}`);
+        return content?.default ? content.default : content;
+      }
+    }
+    console.log("✅ load module finish ...");
   }
 }
 export default Loader;
